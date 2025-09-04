@@ -103,8 +103,8 @@ std::unique_ptr<Node::Drop> Parser::parseDrop() {
 std::unique_ptr<Node::Delete> Parser::parseDelete() {
     std::string name = consume(Token::identifier);
     discard(Token::exclamationPoint);
-
     std::vector<std::unique_ptr<Node::Filter>> filters;
+    filters.push_back(parseFilter());
     while (*it == Token::questionMark) {
         filters.push_back(parseFilter());
     }
