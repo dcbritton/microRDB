@@ -1,0 +1,82 @@
+// pseduo-bnf.txt
+
+// This file contains a "pseudo-bnf" grammar for microRBD QL.
+// []* indicates any number of repetitions for the enclosed rule.
+// [ rule | other_rule ] indicates an alternation.
+
+SCRIPT          - [[CREATE | DROP | INSERT | DELETE | UPDATE | SELECT_EXPR] ;]*
+
+CREATE          - IDENTIFIER = NAME_TYPE_LIST | SELECT_EXPR
+NAME_TYPE_LIST  - NAME_TYPE_PAIR [, NAME_TYPE_PAIR]*
+NAME_TYPE_PAIR  - IDENTIFIER : [kwInt | kwFloat | kwBool | [kwChars INT_LITERAL]]
+
+DROP            - IDENTIFIER ~
+
+INSERT          - IDENTIFIER <- EXPRESSION_LIST [<- EXPRESSION_LIST]*
+EXPRESSION_LIST - OR_EXPR [, OR_EXPR]*
+
+DELETE          - IDENTIFIER ! FILTER [FILTER]*
+FILTER          - ? OR_EXPR
+
+UPDATE          - IDENTIFIER := ASSIGN_LIST FILTER [FILTER]*
+ASSIGN_LIST     - ASSIGN [, ASSIGN]*
+ASSIGN          - IDENTIFIER ( OR_EXPR )
+
+// @TODO: determine if filter_expr exists or if it is bound to projections
+
+SELECT_EXPR     - PROJECT_EXPR
+                | SELECT_EXPR ? OR_EXPR
+
+PROJECT_EXPR    - UNION_EXPR
+                | PROJECT_EXPR -> COLUMN_LIST
+
+COLUMN_LIST     - IDENTIFIER [, IDENTIFIER]*
+
+UNION_EXPR      - DIFF_EXPR
+                | UNION_EXPR | DIFF_EXPR
+
+DIFF_EXPR       - INTERSECT_EXPR
+                | DIFF_EXPR - INTERSECT_EXPR
+
+INTERSECT_EXPR  - JOIN_EXPR
+                | INTERSECT_EXPR & JOIN_EXPR
+
+JOIN_EXPR       - TABLE_PRIMARY
+                | JOIN_EXPR ^ TABLE_PRIMARY
+
+TABLE_PRIMARY   - ( PROJECT_EXPR )
+                | IDENTIFIER
+
+OR_EXPR         - AND_EXPR
+                | OR_EXPR || AND_EXPR
+
+AND_EXPR        - EQUALITY_EXPR
+                | AND_EXPR && EQUALITY_EXPR
+
+EQUALITY_EXPR   - RELATIONAL_EXPR
+                | EQUALITY_EXPR == RELATIONAL_EXPR
+                | EQUALITY_EXPR != RELATIONAL_EXPR
+
+RELATIONAL_EXPR - ADDITIVE_EXPR
+                | RELATIONAL_EXPR < ADDITIVE_EXPR
+                | RELATIONAL_EXPR > ADDITIVE_EXPR
+                | RELATIONAL_EXPR <= ADDITIVE_EXPR
+                | RELATIONAL_EXPR >= ADDITIVE_EXPR
+
+ADDITIVE_EXPR   - MULT_EXPR
+                | ADDITIVE_EXPR + MULT_EXPR
+                | ADDITIVE_EXPR - MULT_EXPR  
+
+MULT_EXPR       - PRIMARY
+                | MULT_EXPR * PRIMARY
+                | MULT_EXPR / PRIMARY
+                | MULT_EXPR % PRIMARY
+
+PRIMARY         - ( OR_EXPR )
+                | IDENTIFIER
+                | INT_LITERAL
+                | FLOAT_LITERAL
+                | kwTrue
+                | kwFalse
+                | CHARS_LITERAL
+                | CHARS_LITERAL
