@@ -51,47 +51,46 @@ namespace Node {
 class Visitor {
 private:
 public:
-    virtual ~Visitor() = 0;
-    virtual void visit(const Node::Script* n) const = 0;
+    virtual void visit(const Node::Script* n) = 0;
 
-    virtual void visit(const Node::Create* n) const = 0;
-    virtual void visit(const Node::NameTypeList* n) const = 0;
-    virtual void visit(const Node::NameTypePair* n) const = 0;
+    virtual void visit(const Node::Create* n) = 0;
+    virtual void visit(const Node::NameTypeList* n) = 0;
+    virtual void visit(const Node::NameTypePair* n) = 0;
 
-    virtual void visit(const Node::Drop* n) const = 0;
+    virtual void visit(const Node::Drop* n) = 0;
 
-    virtual void visit(const Node::Delete* n) const = 0;
-    virtual void visit(const Node::Filter* n) const = 0;
-    
-    virtual void visit(const Node::Update* n) const = 0;
-    virtual void visit(const Node::AssignList* n) const = 0;
-    virtual void visit(const Node::Assign* n) const = 0;
+    virtual void visit(const Node::Delete* n) = 0;
+    virtual void visit(const Node::Filter* n) = 0;
 
-    virtual void visit(const Node::Insert* n) const = 0;
-    virtual void visit(const Node::ExpressionList* n) const = 0;
+    virtual void visit(const Node::Update* n) = 0;
+    virtual void visit(const Node::AssignList* n) = 0;
+    virtual void visit(const Node::Assign* n) = 0;
 
-    virtual void visit(const Node::OrExpression* n) const = 0;
-    virtual void visit(const Node::AndExpression* n) const = 0;
-    virtual void visit(const Node::EqualityExpression* n) const = 0;
-    virtual void visit(const Node::RelationalExpression* n) const = 0;
-    virtual void visit(const Node::AdditiveExpression* n) const = 0;
-    virtual void visit(const Node::MultiplicativeExpression* n) const = 0;
+    virtual void visit(const Node::Insert* n) = 0;
+    virtual void visit(const Node::ExpressionList* n) = 0;
 
-    virtual void visit(const Node::Identifier* n) const = 0;
-    virtual void visit(const Node::IntLiteral* n) const = 0;
-    virtual void visit(const Node::FloatLiteral* n) const = 0;
-    virtual void visit(const Node::BoolLiteral* n) const = 0;
-    virtual void visit(const Node::CharsLiteral* n) const = 0;
+    virtual void visit(const Node::OrExpression* n) = 0;
+    virtual void visit(const Node::AndExpression* n) = 0;
+    virtual void visit(const Node::EqualityExpression* n) = 0;
+    virtual void visit(const Node::RelationalExpression* n) = 0;
+    virtual void visit(const Node::AdditiveExpression* n) = 0;
+    virtual void visit(const Node::MultiplicativeExpression* n) = 0;
 
-    virtual void visit(const Node::SelectExpression* n) const = 0;
-    virtual void visit(const Node::ProjectExpression* n) const = 0;
-    virtual void visit(const Node::ColumnList* n) const = 0;
-    virtual void visit(const Node::UnionExpression* n) const = 0;
-    virtual void visit(const Node::DifferenceExpression* n) const = 0;
-    virtual void visit(const Node::IntersectExpression* n) const = 0;
-    virtual void visit(const Node::JoinExpression* n) const = 0;
+    virtual void visit(const Node::Identifier* n) = 0;
+    virtual void visit(const Node::IntLiteral* n) = 0;
+    virtual void visit(const Node::FloatLiteral* n) = 0;
+    virtual void visit(const Node::BoolLiteral* n) = 0;
+    virtual void visit(const Node::CharsLiteral* n) = 0;
 
-    // virtual void visit(const Node::* n) const = 0;
+    virtual void visit(const Node::SelectExpression* n) = 0;
+    virtual void visit(const Node::ProjectExpression* n) = 0;
+    virtual void visit(const Node::ColumnList* n) = 0;
+    virtual void visit(const Node::UnionExpression* n) = 0;
+    virtual void visit(const Node::DifferenceExpression* n) = 0;
+    virtual void visit(const Node::IntersectExpression* n) = 0;
+    virtual void visit(const Node::JoinExpression* n) = 0;
+
+    // virtual void visit(const Node::* n) = 0;
 };
 
 #endif

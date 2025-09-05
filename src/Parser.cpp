@@ -477,12 +477,12 @@ std::unique_ptr<Node::Node> Parser::parseJoinExpression() {
     return LHS;
 }
 
-// TABLE_PRIMARY   - ( PROJECT_EXPR ) 
+// TABLE_PRIMARY   - ( SELECT_EXPR ) 
 //                 | TABLE_NAME
 std::unique_ptr<Node::Node> Parser::parseTablePrimary() {
     if (*it == Token::openParen) {
         discard(Token::openParen);
-        auto expr = parseProjectExpression();
+        auto expr = parseSelectExpression();
         discard(Token::closeParen);
         return expr;
     }

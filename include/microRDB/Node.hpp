@@ -11,7 +11,7 @@ namespace Node {
 
     // node
     struct Node {
-        virtual void accept(const std::unique_ptr<Visitor>& v) const {}
+        virtual void accept(Visitor* v) const {}
     };
 
     // script
@@ -19,7 +19,7 @@ namespace Node {
         const std::vector<std::unique_ptr<Node>> statements;
 
         Script(std::vector<std::unique_ptr<Node>>& statements) : statements(std::move(statements)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // create
@@ -28,7 +28,7 @@ namespace Node {
         const std::unique_ptr<Node> expression;
 
         Create(const std::string& tableName, std::unique_ptr<Node> expression) : tableName(tableName), expression(std::move(expression)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // name-type list
@@ -37,7 +37,7 @@ namespace Node {
 
         NameTypeList(std::vector<std::unique_ptr<Node>>& nameTypePairs)
             : nameTypePairs(std::move(nameTypePairs)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // name-type pair
@@ -50,7 +50,7 @@ namespace Node {
             : name(name), type(type), numChars("") {}
         NameTypePair(const std::string& name, const std::string& type, const std::string& numChars)
             : name(name), type(type), numChars(numChars) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // drop
@@ -59,14 +59,14 @@ namespace Node {
         
         Drop(const std::string& tableName)
             : tableName(tableName) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // filter
     struct Filter : Node {
         const std::unique_ptr<Node> expr;
         Filter(std::unique_ptr<Node> expr) : expr(std::move(expr)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // update
@@ -77,14 +77,14 @@ namespace Node {
 
         Update(const std::string& tableName, std::unique_ptr<Node> assignList, std::vector<std::unique_ptr<Filter>>& filters)
             : tableName(tableName), assignList(std::move(assignList)), filters(std::move(filters)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // assign list
     struct AssignList : Node {
         const std::vector<std::unique_ptr<Node>> assigns;
         AssignList(std::vector<std::unique_ptr<Node>>& assigns) : assigns(std::move(assigns)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // assign
@@ -93,7 +93,7 @@ namespace Node {
         const std::unique_ptr<Node> expr;
         Assign(const std::string& name, std::unique_ptr<Node> expr)
             : name(name), expr(std::move(expr)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // delete
@@ -103,7 +103,7 @@ namespace Node {
 
         Delete(const std::string& tableName, std::vector<std::unique_ptr<Filter>>& filters)
             : tableName(tableName), filters(std::move(filters)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
 
@@ -114,7 +114,7 @@ namespace Node {
 
         Insert(const std::string& tableName, std::vector<std::unique_ptr<Node>>& expressionLists) 
             : tableName(tableName), expressionLists(std::move(expressionLists)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // expression list
@@ -123,7 +123,7 @@ namespace Node {
 
         ExpressionList(std::vector<std::unique_ptr<Node>>& expressions) 
             : expressions(std::move(expressions)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // or expression
@@ -133,7 +133,7 @@ namespace Node {
 
         OrExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // and expression
@@ -143,7 +143,7 @@ namespace Node {
 
         AndExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // equality expression
@@ -154,7 +154,7 @@ namespace Node {
 
         EqualityExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS, const std::string& op)
             : LHS(std::move(LHS)), RHS(std::move(RHS)), op(op) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // relational expression
@@ -165,7 +165,7 @@ namespace Node {
 
         RelationalExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS, const std::string& op)
             : LHS(std::move(LHS)), RHS(std::move(RHS)), op(op) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // additive expression
@@ -176,7 +176,7 @@ namespace Node {
 
         AdditiveExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS, const std::string& op)
             : LHS(std::move(LHS)), RHS(std::move(RHS)), op(op) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // multiplicative expression
@@ -187,7 +187,7 @@ namespace Node {
 
         MultiplicativeExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS, const std::string& op)
             : LHS(std::move(LHS)), RHS(std::move(RHS)), op(op) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // identifier
@@ -196,7 +196,7 @@ namespace Node {
 
         Identifier(const std::string& name)
             : name(name) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // int literal
@@ -205,7 +205,7 @@ namespace Node {
 
         IntLiteral(int value)
             : value(value) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // float literal
@@ -214,7 +214,7 @@ namespace Node {
 
         FloatLiteral(float value)
             : value(value) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // bool literal
@@ -223,7 +223,7 @@ namespace Node {
 
         BoolLiteral(bool value)
             : value(value) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // chars literal
@@ -231,7 +231,7 @@ namespace Node {
         const std::string value;
         CharsLiteral(const std::string& value)
             : value(value) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // select expression
@@ -241,7 +241,7 @@ namespace Node {
 
         SelectExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // project expression
@@ -251,14 +251,14 @@ namespace Node {
 
         ProjectExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // column list
     struct ColumnList : Node {
         const std::vector<std::unique_ptr<Identifier>> columns;
         ColumnList(std::vector<std::unique_ptr<Identifier>>& columns) : columns(std::move(columns)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // union expression
@@ -268,7 +268,7 @@ namespace Node {
 
         UnionExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // diff expression
@@ -278,7 +278,7 @@ namespace Node {
 
         DifferenceExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // intersect expression
@@ -288,7 +288,7 @@ namespace Node {
 
         IntersectExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
     // join expression
@@ -298,7 +298,7 @@ namespace Node {
 
         JoinExpression(std::unique_ptr<Node> LHS, std::unique_ptr<Node> RHS)
             : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-        void accept(const std::unique_ptr<Visitor>& v) const { v->visit(this); }
+        void accept(Visitor* v) const { v->visit(this); }
     };
 
 }

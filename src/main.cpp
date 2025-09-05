@@ -4,6 +4,7 @@
 #include <iostream>
 #include "microRDB/Lexer.hpp"
 #include "microRDB/Parser.hpp"
+#include "microRDB/DOTVisitor.hpp"
 
 int main(int argc, char** argv) {
     // get input
@@ -26,6 +27,10 @@ int main(int argc, char** argv) {
     auto astRoot = p.parse();
 
     // DOT visitor
+    DOTVisitor dv("ast.dot");
+    Visitor* v = &dv;
+    astRoot->accept(&dv);
+
     // semantic analyis visitor
     // execution
     return 0;
